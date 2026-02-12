@@ -15,10 +15,10 @@ import com.github.terrakok.mobicon.ui.events.EventsListPage
 import com.github.terrakok.mobicon.ui.rememberDesktopDialogSceneStrategy
 import com.github.terrakok.mobicon.ui.session.SessionPage
 import com.github.terrakok.mobicon.ui.speaker.SpeakerPage
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import org.koin.compose.viewmodel.koinViewModel
 
 sealed interface AppScreen : NavKey
 
@@ -51,7 +51,7 @@ private val config = SavedStateConfiguration {
 
 @Composable
 internal fun RootContent() {
-    val vm = metroViewModel<RootViewModel>()
+    val vm = koinViewModel<RootViewModel>()
     val initialStack = vm.initialStack
     if (initialStack.isEmpty()) return
     val backStack = rememberNavBackStack(config, *initialStack.toTypedArray())

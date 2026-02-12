@@ -1,42 +1,46 @@
 package com.github.terrakok.mobicon
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
-import androidx.lifecycle.ViewModel
-import com.github.terrakok.mobicon.DeeplinkService
 import com.russhwolf.settings.Settings
-import dev.zacsweers.metro.*
-import dev.zacsweers.metrox.viewmodel.*
-import io.ktor.client.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.cache.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.cache.HttpCache
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import kotlin.reflect.KClass
+import org.koin.compose.KoinApplication
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Configuration
+import org.koin.core.annotation.KoinApplication
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
+import org.koin.plugin.module.dsl.koinConfiguration
 
-@SingleIn(AppScope::class)
-@DependencyGraph(AppScope::class)
-internal interface AppGraph: ViewModelGraph {
-    @DependencyGraph.Factory
-    fun interface Factory {
-        fun create(@Provides deeplink: DeeplinkService): AppGraph
-    }
+@KoinApplication
+object KoinApp
 
-    @SingleIn(AppScope::class)
-    @Provides
-    fun provideJson(): Json = Json {
+@Module
+@ComponentScan("com.github.terrakok.mobicon")
+@Configuration
+class AppModule
+
+@Single
+internal class JsonProvider {
+    val json: Json = Json {
         ignoreUnknownKeys = true
         coerceInputValues = true
         isLenient = true
         explicitNulls = false
     }
+}
 
-    @SingleIn(AppScope::class)
-    @Provides
-    fun provideHttpClient(json: Json): HttpClient = HttpClient {
+@Single
+internal class HttpClientProvider(jsonProvider: JsonProvider) {
+    val httpClient: HttpClient = HttpClient {
+        val json = jsonProvider.json
         install(ContentNegotiation) { json(json) }
         install(HttpCache)
         install(Logging) {
@@ -52,29 +56,25 @@ internal interface AppGraph: ViewModelGraph {
             socketTimeoutMillis = 50000
         }
     }
-    @SingleIn(AppScope::class)
-    @Provides
-    fun provideSettings(): Settings = Settings()
+}
+
+@Single
+internal class SettingsProvider {
+    val settings: Settings = Settings()
 }
 
 @Composable
-internal fun WithAppGraph(
+internal fun WithKoinApplication(
     deeplink: DeeplinkService,
     content: @Composable () -> Unit,
 ) {
-    val graph = remember { createGraphFactory<AppGraph.Factory>().create(deeplink) }
-    CompositionLocalProvider(
-        LocalMetroViewModelFactory provides graph.metroViewModelFactory
-    ) {
-        content()
-    }
+    KoinApplication(
+        configuration = koinConfiguration<KoinApp> {
+            // KoinApp is auto-detected via @KoinApplication
+            //modules(
+            //    AppModule()
+            //)
+        },
+        content = content
+    )
 }
-
-@Inject
-@ContributesBinding(AppScope::class)
-@SingleIn(AppScope::class)
-internal class MyViewModelFactory(
-    override val viewModelProviders: Map<KClass<out ViewModel>, Provider<ViewModel>>,
-    override val assistedFactoryProviders: Map<KClass<out ViewModel>, Provider<ViewModelAssistedFactory>>,
-    override val manualAssistedFactoryProviders: Map<KClass<out ManualViewModelAssistedFactory>, Provider<ManualViewModelAssistedFactory>>,
-) : MetroViewModelFactory()

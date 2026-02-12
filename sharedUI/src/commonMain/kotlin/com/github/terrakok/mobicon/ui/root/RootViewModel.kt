@@ -4,20 +4,17 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.terrakok.mobicon.DeeplinkService
+import com.github.terrakok.mobicon.SettingsProvider
 import com.russhwolf.settings.Settings
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.KoinViewModel
 
-@ContributesIntoMap(AppScope::class)
-@ViewModelKey(RootViewModel::class)
-@Inject
+@KoinViewModel
 internal class RootViewModel(
     private val deeplinkService: DeeplinkService,
-    private val settings: Settings
+    settingsProvider: SettingsProvider
 ) : ViewModel() {
+    private val settings: Settings = settingsProvider.settings
     private companion object {
         const val LAST_EVENT_ID_KEY = "lastEventId"
     }

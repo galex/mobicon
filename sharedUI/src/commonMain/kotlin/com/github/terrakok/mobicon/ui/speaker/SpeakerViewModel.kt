@@ -9,26 +9,15 @@ import androidx.lifecycle.viewModelScope
 import com.github.terrakok.mobicon.DataService
 import com.github.terrakok.mobicon.Session
 import com.github.terrakok.mobicon.Speaker
-import dev.zacsweers.metro.*
-import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
-import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.KoinViewModel
 
-@AssistedInject
+@KoinViewModel
 internal class SpeakerViewModel(
-    @Assisted("eventId") val eventId: String,
-    @Assisted("speakerId") val speakerId: String,
+    val eventId: String,
+    val speakerId: String,
     private val dataService: DataService
 ) : ViewModel() {
-    @AssistedFactory
-    @ManualViewModelAssistedFactoryKey(Factory::class)
-    @ContributesIntoMap(AppScope::class)
-    interface Factory : ManualViewModelAssistedFactory {
-        fun create(
-            @Assisted("eventId") eventId: String,
-            @Assisted("speakerId") speakerId: String
-        ): SpeakerViewModel
-    }
 
     var speaker by mutableStateOf<Speaker?>(null)
         private set

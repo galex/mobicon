@@ -26,7 +26,6 @@ import com.github.terrakok.mobicon.dateFormat
 import com.github.terrakok.mobicon.timeFormat
 import com.github.terrakok.mobicon.ui.LoadingWidget
 import com.github.terrakok.mobicon.ui.VerticalScrollbar
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.format.MonthNames
@@ -36,12 +35,13 @@ import mobicon.sharedui.generated.resources.Res
 import mobicon.sharedui.generated.resources.ic_calendar
 import mobicon.sharedui.generated.resources.ic_close
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun EventsListPage(
     onEventClick: (String) -> Unit
 ) {
-    val vm = metroViewModel<EventsListViewModel>()
+    val vm = koinViewModel<EventsListViewModel>()
 
     if (vm.loading || vm.error != null) {
         LoadingWidget(

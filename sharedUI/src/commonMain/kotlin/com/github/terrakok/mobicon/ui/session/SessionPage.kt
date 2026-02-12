@@ -25,9 +25,10 @@ import com.github.terrakok.mobicon.Speaker
 import com.github.terrakok.mobicon.dayShortString
 import com.github.terrakok.mobicon.ui.LoadingWidget
 import com.github.terrakok.mobicon.ui.VerticalScrollbar
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import mobicon.sharedui.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 internal fun SessionPage(
@@ -36,7 +37,7 @@ internal fun SessionPage(
     onSpeakerClick: (String) -> Unit,
     onBack: () -> Unit
 ) {
-    val vm = assistedMetroViewModel<SessionViewModel, SessionViewModel.Factory> { create(eventId, sessionId) }
+    val vm = koinViewModel<SessionViewModel>(parameters = { parametersOf(eventId, sessionId) })
 
     if (vm.loading || vm.error != null) {
         LoadingWidget(

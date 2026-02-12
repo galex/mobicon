@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.android.kmp.library)
     alias(libs.plugins.kotlinx.serialization)
-    alias(libs.plugins.metro)
+    alias(libs.plugins.koin.compiler)
 }
 
 kotlin {
@@ -53,7 +53,11 @@ kotlin {
             implementation(libs.multiplatformSettings)
             implementation(libs.kotlinx.datetime)
             implementation(libs.materialKolor)
-            implementation(libs.metro.viewmodel)
+            implementation(libs.koin.core)
+            implementation(libs.koin.annotations)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
             implementation(libs.androidx.material3.adaptive)
             implementation(libs.unstyled)
         }
@@ -101,4 +105,10 @@ kotlin {
 
 dependencies {
     androidRuntimeClasspath(libs.compose.ui.tooling)
+}
+
+koinCompiler {
+    userLogs = true
+    debugLogs = false
+    dslSafetyChecks = true
 }

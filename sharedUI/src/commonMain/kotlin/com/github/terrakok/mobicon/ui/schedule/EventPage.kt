@@ -38,7 +38,6 @@ import com.composables.core.rememberScrollAreaState
 import com.github.terrakok.mobicon.*
 import com.github.terrakok.mobicon.ui.LoadingWidget
 import com.github.terrakok.mobicon.ui.VerticalScrollbar
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -50,6 +49,8 @@ import mobicon.sharedui.generated.resources.ic_arrow_drop_down
 import mobicon.sharedui.generated.resources.ic_info
 import mobicon.sharedui.generated.resources.ic_sentiment
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -59,9 +60,7 @@ internal fun SchedulePage(
     onSessionClick: (String) -> Unit,
     onEventInfoClick: (String) -> Unit,
 ) {
-    val vm = assistedMetroViewModel<ScheduleViewModel, ScheduleViewModel.Factory> {
-        create(eventId)
-    }
+    val vm = koinViewModel<ScheduleViewModel>(parameters = { parametersOf(eventId) })
 
     if (vm.loading || vm.error != null) {
         LoadingWidget(

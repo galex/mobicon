@@ -26,7 +26,6 @@ import com.github.terrakok.mobicon.Speaker
 import com.github.terrakok.mobicon.dayShortString
 import com.github.terrakok.mobicon.ui.LoadingWidget
 import com.github.terrakok.mobicon.ui.VerticalScrollbar
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import mobicon.sharedui.generated.resources.Res
 import mobicon.sharedui.generated.resources.ic_business_center
 import mobicon.sharedui.generated.resources.ic_close
@@ -37,6 +36,8 @@ import mobicon.sharedui.generated.resources.ic_sentiment
 import mobicon.sharedui.generated.resources.ic_verified
 import mobicon.sharedui.generated.resources.ic_web_traffic
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +47,7 @@ internal fun SpeakerPage(
     onSessionClick: (String) -> Unit,
     onBack: () -> Unit
 ) {
-    val vm = assistedMetroViewModel<SpeakerViewModel, SpeakerViewModel.Factory> { create(eventId, speakerId) }
+    val vm = koinViewModel<SpeakerViewModel>(parameters = { parametersOf(eventId, speakerId) })
 
     if (vm.loading || vm.error != null) {
         LoadingWidget(

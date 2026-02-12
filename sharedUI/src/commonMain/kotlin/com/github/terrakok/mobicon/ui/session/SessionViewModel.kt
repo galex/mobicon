@@ -12,27 +12,15 @@ import com.github.terrakok.mobicon.EventInfo
 import com.github.terrakok.mobicon.Room
 import com.github.terrakok.mobicon.Session
 import com.github.terrakok.mobicon.Speaker
-import dev.zacsweers.metro.*
-import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
-import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.KoinViewModel
 
-@AssistedInject
+@KoinViewModel
 internal class SessionViewModel(
-    @Assisted("eventId") val eventId: String,
-    @Assisted("sessionId") val sessionId: String,
+    val eventId: String,
+    val sessionId: String,
     private val dataService: DataService
 ) : ViewModel() {
-
-    @AssistedFactory
-    @ManualViewModelAssistedFactoryKey(Factory::class)
-    @ContributesIntoMap(AppScope::class)
-    interface Factory : ManualViewModelAssistedFactory {
-        fun create(
-            @Assisted("eventId") eventId: String,
-            @Assisted("sessionId") sessionId: String
-        ): SessionViewModel
-    }
 
     var event by mutableStateOf<EventInfo?>(null)
         private set

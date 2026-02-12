@@ -9,8 +9,10 @@ import com.github.terrakok.mobicon.ui.root.SessionScreen
 import com.github.terrakok.mobicon.ui.root.SpeakerScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.koin.core.annotation.Single
 
 @Immutable
+@Single
 class DeeplinkService {
     private val state = MutableStateFlow("")
     val deepLink: StateFlow<String> get() = state

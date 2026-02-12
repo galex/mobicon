@@ -46,19 +46,20 @@ import com.github.terrakok.mobicon.dateFormat
 import com.github.terrakok.mobicon.dayShortString
 import com.github.terrakok.mobicon.timeFormat
 import com.github.terrakok.mobicon.ui.LoadingWidget
-import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import mobicon.sharedui.generated.resources.Res
 import mobicon.sharedui.generated.resources.ic_clock
 import mobicon.sharedui.generated.resources.ic_close
 import mobicon.sharedui.generated.resources.ic_location
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 internal fun EventInfoPage(
     eventId: String,
     onBack: () -> Unit
 ) {
-    val vm = assistedMetroViewModel<EventInfoViewModel, EventInfoViewModel.Factory> { create(eventId) }
+    val vm = koinViewModel<EventInfoViewModel>(parameters = { parametersOf(eventId) })
 
     if (vm.loading || vm.error != null) {
         LoadingWidget(

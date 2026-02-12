@@ -16,7 +16,7 @@ internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 fun App(
     deeplink: DeeplinkService = remember { DeeplinkService() },
     onThemeChanged: @Composable (isDark: Boolean) -> Unit = {}
-) = WithAppGraph(deeplink) {
+) = WithKoinApplication(deeplink) {
     val systemIsDark = isSystemInDarkTheme()
     val isDarkState = remember(systemIsDark) { mutableStateOf(systemIsDark) }
     CompositionLocalProvider(

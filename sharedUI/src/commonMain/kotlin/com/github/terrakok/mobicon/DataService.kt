@@ -1,8 +1,5 @@
 package com.github.terrakok.mobicon
 
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -14,12 +11,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.koin.core.annotation.Single
 
-@Inject
-@SingleIn(AppScope::class)
+@Single
 internal class DataService(
-    private val httpClient: HttpClient
+    httpClientProvider: HttpClientProvider
 ) {
+    private val httpClient = httpClientProvider.httpClient
     private val dispatcher = Dispatchers.Default.limitedParallelism(1)
 
     private val events = mutableMapOf<String, EventInfo>()
