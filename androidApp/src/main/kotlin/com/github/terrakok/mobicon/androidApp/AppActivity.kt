@@ -12,15 +12,18 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowInsetsControllerCompat
 import com.github.terrakok.mobicon.App
 import com.github.terrakok.mobicon.DeeplinkService
+import org.koin.android.ext.android.inject
 
 class AppActivity : ComponentActivity() {
-    private val deepLinkService = DeeplinkService()
+
+    private val deeplinkService: DeeplinkService by inject()
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
         enableEdgeToEdge()
         setContent { 
             App(
-                deeplink = deepLinkService,
                 onThemeChanged = { ThemeChanged(it) }
             )
         }
@@ -29,7 +32,7 @@ class AppActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        deepLinkService.setDeepLink(intent.dataString.orEmpty())
+        deeplinkService.setDeepLink(intent.dataString.orEmpty())
     }
 }
 

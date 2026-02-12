@@ -5,7 +5,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import com.github.terrakok.mobicon.DeeplinkService
 import com.github.terrakok.mobicon.ui.root.RootContent
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicMaterialThemeState
@@ -14,11 +13,11 @@ internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 
 @Composable
 fun App(
-    deeplink: DeeplinkService = remember { DeeplinkService() },
     onThemeChanged: @Composable (isDark: Boolean) -> Unit = {}
-) = WithKoinApplication(deeplink) {
+) {
     val systemIsDark = isSystemInDarkTheme()
     val isDarkState = remember(systemIsDark) { mutableStateOf(systemIsDark) }
+    
     CompositionLocalProvider(
         LocalThemeIsDark provides isDarkState
     ) {

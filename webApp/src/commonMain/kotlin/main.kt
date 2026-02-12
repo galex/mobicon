@@ -1,13 +1,16 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import com.github.terrakok.mobicon.App
-import com.github.terrakok.mobicon.DeeplinkService
-import kotlinx.browser.window
-
-private val deeplink = DeeplinkService()
+import com.github.terrakok.mobicon.initKoin
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    deeplink.setDeepLink(window.location.toString())
-    ComposeViewport { App(deeplink) }
+    // Initialize Koin first
+    initKoin()
+    
+    // Get DeeplinkService from Koin and set the initial deep link
+    //val deeplinkService = KoinPlatform.getKoin().get<DeeplinkService>()
+    //deeplinkService.setDeepLink(window.location.toString())
+    
+    ComposeViewport { App() }
 }

@@ -1,6 +1,5 @@
 package com.github.terrakok.mobicon
 
-import androidx.compose.runtime.Composable
 import com.russhwolf.settings.Settings
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
@@ -11,16 +10,18 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import org.koin.compose.KoinApplication
+import org.koin.core.KoinApplication
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Configuration
-import org.koin.core.annotation.KoinApplication
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
-import org.koin.plugin.module.dsl.koinConfiguration
+import org.koin.core.context.startKoin
+import org.koin.dsl.KoinAppDeclaration
+import org.koin.dsl.includes
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.startKoin
 
-@KoinApplication
-object KoinApp
+
 
 @Module
 @ComponentScan("com.github.terrakok.mobicon")
@@ -63,18 +64,17 @@ internal class SettingsProvider {
     val settings: Settings = Settings()
 }
 
-@Composable
-internal fun WithKoinApplication(
-    deeplink: DeeplinkService,
-    content: @Composable () -> Unit,
-) {
-    KoinApplication(
-        configuration = koinConfiguration<KoinApp> {
-            // KoinApp is auto-detected via @KoinApplication
-            //modules(
-            //    AppModule()
-            //)
-        },
-        content = content
-    )
+/**
+ * Initialize Koin for the application.
+ * Call this from platform-specific entry points (Android Application, Desktop main, etc.)
+ * 
+ * @param configuration Optional additional Koin configuration
+ */
+fun initKoin(configuration: KoinAppDeclaration? = null): KoinApplication {
+    return startKoin<KoinApp> {
+        includes(configuration)
+        // KoinApp with @KoinApplication and @ComponentScan auto-detects all components
+    }.apply {
+        koin.get<Logger>().log("Koin initialized")
+    }
 }
