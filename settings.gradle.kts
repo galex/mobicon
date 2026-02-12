@@ -31,6 +31,7 @@ dependencyResolutionManagement {
     }
 }
 include(":sharedUI")
+include(":logger")
 include(":androidApp")
 include(":desktopApp")
 include(":webApp")
