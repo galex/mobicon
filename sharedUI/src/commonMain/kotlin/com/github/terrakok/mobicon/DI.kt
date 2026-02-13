@@ -15,13 +15,9 @@ import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Configuration
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
-import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.includes
-import org.koin.dsl.module
 import org.koin.plugin.module.dsl.startKoin
-
-
 
 @Module
 @ComponentScan("com.github.terrakok.mobicon")
@@ -64,17 +60,4 @@ internal class SettingsProvider {
     val settings: Settings = Settings()
 }
 
-/**
- * Initialize Koin for the application.
- * Call this from platform-specific entry points (Android Application, Desktop main, etc.)
- * 
- * @param configuration Optional additional Koin configuration
- */
-fun initKoin(configuration: KoinAppDeclaration? = null): KoinApplication {
-    return startKoin<KoinApp> {
-        includes(configuration)
-        // KoinApp with @KoinApplication and @ComponentScan auto-detects all components
-    }.apply {
-        koin.get<Logger>().log("Koin initialized")
-    }
-}
+

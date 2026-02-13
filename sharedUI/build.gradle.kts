@@ -54,7 +54,6 @@ kotlin {
             implementation(libs.multiplatformSettings)
             implementation(libs.kotlinx.datetime)
             implementation(libs.materialKolor)
-            api(project(":logger"))
             implementation(libs.koin.core)
             implementation(libs.koin.annotations)
             implementation(libs.koin.compose)

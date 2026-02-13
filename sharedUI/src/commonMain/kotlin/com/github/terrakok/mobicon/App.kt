@@ -8,6 +8,8 @@ import androidx.compose.ui.graphics.Color
 import com.github.terrakok.mobicon.ui.root.RootContent
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicMaterialThemeState
+import org.koin.compose.KoinApplication
+import org.koin.plugin.module.dsl.koinConfiguration
 
 internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 
@@ -15,26 +17,28 @@ internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 fun App(
     onThemeChanged: @Composable (isDark: Boolean) -> Unit = {}
 ) {
-    val systemIsDark = isSystemInDarkTheme()
-    val isDarkState = remember(systemIsDark) { mutableStateOf(systemIsDark) }
-    
-    CompositionLocalProvider(
-        LocalThemeIsDark provides isDarkState
-    ) {
-        val isDark by isDarkState
-        onThemeChanged(!isDark)
+    KoinApplication(configuration = koinConfiguration<KoinApp>()) {
+        val systemIsDark = isSystemInDarkTheme()
+        val isDarkState = remember(systemIsDark) { mutableStateOf(systemIsDark) }
 
-        val colorScheme = rememberDynamicMaterialThemeState(
-            isDark = isDark,
-            style = PaletteStyle.FruitSalad,
-            primary = Color(0xFF3713EC),
-            secondary = Color(0xFFF97316),
-            tertiary = Color(0xFF22C55E),
-            error = Color(0xFFEC4899),
-        )
-        MaterialTheme(
-            colorScheme = colorScheme.colorScheme,
-            content = { Surface { RootContent() } }
-        )
+        CompositionLocalProvider(
+            LocalThemeIsDark provides isDarkState
+        ) {
+            val isDark by isDarkState
+            onThemeChanged(!isDark)
+
+            val colorScheme = rememberDynamicMaterialThemeState(
+                isDark = isDark,
+                style = PaletteStyle.FruitSalad,
+                primary = Color(0xFF3713EC),
+                secondary = Color(0xFFF97316),
+                tertiary = Color(0xFF22C55E),
+                error = Color(0xFFEC4899),
+            )
+            MaterialTheme(
+                colorScheme = colorScheme.colorScheme,
+                content = { Surface { RootContent() } }
+            )
+        }
     }
 }
