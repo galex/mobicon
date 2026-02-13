@@ -8,7 +8,7 @@ androidx-adaptive = "1.3.0-alpha04"
 material3 = "1.11.0-alpha03+dev3614"
 
 unstyled = "1.49.6"
-agp = "8.12.3"
+agp = "9.0.0"
 androidx-activityCompose = "1.12.3"
 kermit = "2.0.8"
 kotlinx-coroutines = "1.10.2"

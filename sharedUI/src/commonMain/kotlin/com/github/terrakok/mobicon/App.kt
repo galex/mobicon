@@ -5,10 +5,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import com.github.terrakok.mobicon.logger.Logger
 import com.github.terrakok.mobicon.ui.root.RootContent
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicMaterialThemeState
 import org.koin.compose.KoinApplication
+import org.koin.compose.koinInject
 import org.koin.plugin.module.dsl.koinConfiguration
 
 internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
@@ -18,6 +20,9 @@ fun App(
     onThemeChanged: @Composable (isDark: Boolean) -> Unit = {}
 ) {
     KoinApplication(configuration = koinConfiguration<KoinApp>()) {
+        val logger = koinInject<Logger>()
+        logger.debug("App", "Status started")
+
         val systemIsDark = isSystemInDarkTheme()
         val isDarkState = remember(systemIsDark) { mutableStateOf(systemIsDark) }
 
